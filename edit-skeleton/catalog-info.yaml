@@ -1,0 +1,17 @@
+metadata:
+  description: ${{ values.description }}
+spec:
+  mesh:
+    description: ${{ values.description }}
+    dependsOn: {% if values.dependsOn | length > 0 %}{% for i in values.dependsOn %}
+      - ${{ i }}{% endfor %}{% else %}[]{% endif %}
+    tags: {% if values.tags | length > 0 %}{% for i in values.tags %}
+      - tagFQN: ${{ i }}
+        source: Tag
+        labelType: Manual
+        state: Confirmed{% endfor %}{% else %}[]{% endif %}
+    readsFrom: {% if values.readsFrom | length > 0 %}{% for i in values.readsFrom %}
+      - ${{ i }}{% endfor %}{% else %}[]{% endif %}
+    __dataContractGuardianSpec:
+      guards: {% if values.dataContracts | length > 0 %}{% for i in values.dataContracts %}
+        - dataContractId: ${{ i }}{% endfor %}{% else %}[]{% endif %}
