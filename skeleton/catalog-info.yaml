@@ -13,11 +13,11 @@ spec:
   type: workload
   lifecycle: experimental
   owner: ${{ values.developmentGroup }}
-  system: ${{ values.dataproduct }}
+  system: ${{ values.parentRef }}
   domain: ${{ values.domain }}
   mesh:
     name: ${{ values.name }}
-    fullyQualifiedName: ${{ values.domainName }} - ${{ values.dataproductName }} - version ${{ values.identifier.split(".")[2] }} - ${{ values.name }}
+    fullyQualifiedName: ${{ values.domainName }} - ${{ values.parentRefName }} - version ${{ values.identifier.split(".")[2] }} - ${{ values.name }}
     description: ${{ values.description }}
     kind: workload
     version: 0.0.0

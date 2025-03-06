@@ -4,6 +4,8 @@ metadata:
   name: gx-guardian-workload-template.0
   title: Great Expectations Guardian Workload Template
   description: Allows to monitor Data Contracts
+  annotations:
+    backstage.io/techdocs-ref: dir:.
   tags:
     - workload
     - gx
@@ -19,7 +21,7 @@ spec:
         - name
         - description
         - domain
-        - dataproduct
+        - parentRef
         - identifier
         - developmentGroup
       properties:
@@ -39,16 +41,16 @@ spec:
         domain:
           title: Domain
           type: string
-          description: Required. Domain of the Data Product this component belongs to.
+          description: Required. Domain of the System this component belongs to.
           ui:field: EntityPicker
           ui:options:
             allowArbitraryValues: false
             allowedKinds:
               - Domain
-        dataproduct:
-          title: Data Product
+        parentRef:
+          title: Parent
           type: string
-          description: Required. Data Product this component belongs to.
+          description: Required. The System this workload belongs to, e.g. a Data Product. Be sure to choose the right one.
           ui:field: EntityPicker
           ui:filter:
             - fieldName: domain
@@ -67,21 +69,21 @@ spec:
         developmentGroup:
           title: Development Group
           type: string
-          description: Automatically selected from the Data Product metadata. Data Product development group.
+          description: Automatically selected from the System metadata. System development group.
           ui:field: EntitySelectionPicker
-          ui:fieldName: dataproduct
+          ui:fieldName: parentRef
           ui:property: spec.owner
           ui:options:
             allowArbitraryValues: false
         dependsOn:
           title: Dependencies
           type: array
-          description: A component could depend on other components in the same Data Product. This information will be used to deploy the components in such an order that their dependencies already exist.
+          description: A component could depend on other components in the same System. This information will be used to deploy the components in such an order that their dependencies already exist.
           default: []
           items:
             type: string
             ui:field: EntityRelationsPicker
-            ui:fieldName: dataproduct
+            ui:fieldName: parentRef
             relation: hasPart
         readsFrom:
           title: Reads from
@@ -106,10 +108,10 @@ spec:
           ui:options:
             allowArbitraryValues: false
           ui:widget: hidden
-        dataproductName:
+        parentRefName:
           type: string
           ui:field: EntitySelectionPicker
-          ui:fieldName: dataproduct
+          ui:fieldName: parentRef
           ui:property: spec.mesh.name
           ui:options:
             allowArbitraryValues: false
@@ -130,7 +132,7 @@ spec:
               - type: DataContract
                 returnField: urn
                 filter:
-                  system: '{{dataproduct}}'
+                  system: '{{parentRef}}'
                 userFilters:
                   - search
                   - system
@@ -146,19 +148,19 @@ spec:
           name: '${{ parameters.name }}'
           description: '${{ parameters.description }}'
           domain: '${{ parameters.domain }}'
-          dataproduct: '${{ parameters.dataproduct }}'
+          parentRef: '${{ parameters.parentRef }}'
           identifier: '${{ parameters.identifier }}'
           developmentGroup: '${{ parameters.developmentGroup }}'
           dependsOn: '${{ parameters.dependsOn }}'
           readsFrom: '${{ parameters.readsFrom }}'
           tags: '${{ parameters.tags }}'
           domainName: '${{ parameters.domainName }}'
-          dataproductName: '${{ parameters.dataproductName }}'
+          parentRefName: '${{ parameters.parentRefName }}'
           dataContracts: '${{ parameters.dataContracts }}'
           useCaseTemplateId: urn:dmb:utm:gx-guardian-workload-template:0.0.0
           infrastructureTemplateId: urn:dmb:itm:gx-guardian-tech-adapter:0
           useCaseTemplateVersion: 0.0.0
-          destination: &destination 'gitlab.com?owner=AgileDMBSandbox%2F${{orgname}}%2Fmesh.repository%2F${{ parameters.domain | replace(r/domain:| |-/, "") }}%2F${{ parameters.dataproduct.split(".")[1] | replace(r/ |-/g, "") }}&repo=${{ parameters.name.split(" ") | join("") | lower }}'
+          destination: &destination 'gitlab.com?owner=AgileDMBSandbox%2F${{orgname}}%2Fmesh.repository%2F${{ parameters.domain | replace(r/domain:| |-/, "") }}%2F${{ parameters.parentRef.split(".")[1] | replace(r/ |-/g, "") }}&repo=${{ parameters.name.split(" ") | join("") | lower }}'
 
     - id: publish
       name: Publish
@@ -168,7 +170,7 @@ spec:
         description: 'This is ${{ parameters.name }}'
         repoUrl: *destination
         rootDirectory: '${{ parameters.rootDirectory }}'
-        dataproduct: '${{ parameters.dataproduct }}'
+        parentRef: '${{ parameters.parentRef }}'
 
     - id: register
       name: Register
