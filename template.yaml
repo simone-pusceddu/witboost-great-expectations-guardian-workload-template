@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: gx-guardian-workload-template.0
-  title: Great Expectations Guardian Workload Template
+  name: gx-guardian-workload-template-skeleton
+  title: Great Expectations Guardian Workload Template (Skeleton)
   description: Allows to monitor Data Contracts
   annotations:
     backstage.io/techdocs-ref: dir:.
@@ -160,7 +160,7 @@ spec:
           useCaseTemplateId: urn:dmb:utm:gx-guardian-workload-template:0.0.0
           infrastructureTemplateId: urn:dmb:itm:gx-guardian-tech-adapter:0
           useCaseTemplateVersion: 0.0.0
-          destination: &destination 'gitlab.com?owner=AgileDMBSandbox%2F${{orgname}}%2Fmesh.repository%2F${{ parameters.domain | replace(r/domain:| |-/, "") }}%2F${{ parameters.parentRef.split(".")[1] | replace(r/ |-/g, "") }}&repo=${{ parameters.name.split(" ") | join("") | lower }}'
+          destination: &destination 'gitlab.com?owner=simone.pusceddu&repo=${{ parameters.name.split(" ") | join("") | lower }}'
 
     - id: publish
       name: Publish
