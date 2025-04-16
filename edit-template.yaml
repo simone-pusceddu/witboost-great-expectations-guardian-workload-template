@@ -1,4 +1,4 @@
-apiVersion: witboost.com/v1
+apiVersion: witboost.com/v2
 kind: EditTemplate
 metadata:
   name: edit-gx-guardian-workload-template.0
